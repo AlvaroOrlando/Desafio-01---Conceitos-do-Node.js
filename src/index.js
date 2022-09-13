@@ -12,10 +12,9 @@ const users = [];
 
 function checksExistsUserAccount(request, response, next) {
    const { username } = request.headers;
+   console.log(users);
 
-   const user = users.find(user =>{
-    user.username === username
-   });
+   const user = users.find(user =>  user.username === username);
 
    if(!user){
     return response.status(404).json({ error: 'User not found!'})
@@ -53,7 +52,8 @@ app.post('/users', (request, response) => {
 
   
 app.get('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { user } = request;
+  return response.status(200).json(user.todos)
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
