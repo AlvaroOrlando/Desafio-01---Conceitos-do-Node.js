@@ -72,7 +72,6 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
   const { user } = request;
   const { id } = request.params;
   const { title, deadline } = request.body;
@@ -90,22 +89,32 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
   const { id } = request.params;
   const { user } = request;
   
-  const todo = user.todos.find(todo => id === todo.id)
+  const todo = user.todos.find(todo => id === todo.id);
 
   if(!todo){
     return response.status(404).json({ error: 'Todo not found!'})
-  }
+  };
 
   todo.done = true;
   response.status(201).json(todo);
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+    const { id } = request.params;
+    const { user } = request;
+    const todoIndex = user.todos.findIndex(todo => id === todo.id);
+
+    if(!todoIndex === -1){
+      return response.status(404).json({ error: 'Todo not found!' })
+    };
+
+    user.todos.splice(todoIndex, 1);
+
+    return response.status(204).send()
+
 });
 
 module.exports = app;
